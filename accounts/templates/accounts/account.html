@@ -1,0 +1,37 @@
+{% extends 'accounts/base.html' %}
+{% block title %}Account | Event Website{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card shadow-sm mt-4">
+            <div class="card-body">
+                <h2 class="mb-4">Account Details</h2>
+                <div class="mb-3">
+                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Date Joined:</strong> {{ user.date_joined|date:'F d, Y H:i' }}</p>
+                    <p><strong>Last Login:</strong> {{ user.last_login|date:'F d, Y H:i' }}</p>
+                    <p><strong>Account Type:</strong> 
+                        {% if user.is_superuser %}Superuser (Admin){% elif user.is_staff %}Staff (Admin){% else %}Regular User{% endif %}
+                    </p>
+                    <p><strong>Password:</strong> <span class="text-muted">(Hidden for your privacy)</span></p>
+                </div>
+                <div class="mb-3">
+                    <a href="/accounts/password_change/" class="btn btn-outline-primary mb-2">Change Password</a>
+                    <form action="/accounts/logout/" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger mb-2">Logout</button>
+                    </form>
+                </div>
+                {% if user.is_staff or user.is_superuser %}
+                <hr>
+                <div class="alert alert-info mt-3">
+                    <strong>Admin Info:</strong> As an admin, you can view all user accounts and manage hall data from the <a href="/admin/">Django Admin</a> panel.<br>
+                    <span class="text-muted">(User passwords are never visible for privacy and security.)</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
