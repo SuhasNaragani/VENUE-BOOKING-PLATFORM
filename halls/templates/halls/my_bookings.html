@@ -1,0 +1,46 @@
+{% extends 'accounts/base.html' %}
+{% block title %}My Bookings | Event Website{% endblock %}
+{% block content %}
+<h2 class="mb-4 text-center">My Bookings</h2>
+{% if bookings %}
+<div class="row justify-content-center" style="gap:2rem 0;">
+    {% for booking in bookings %}
+    <div class="col-12 d-flex justify-content-center mb-5">
+        <div class="card booking-card shadow-lg border-0 rounded-5 h-100" style="width:98vw; max-width:1700px; margin:0 1vw; box-shadow:0 8px 32px 0 rgba(31,38,135,0.18), 0 1.5rem 3rem rgba(0,0,0,0.12)!important; border-radius:2rem; transition:box-shadow 0.3s;">
+            <div class="row g-0 align-items-stretch">
+                <div class="col-4 d-flex align-items-center justify-content-center" style="min-height:240px; padding:0;">
+                    {% if booking.hall.cover_photo %}
+                        <img src="{{ booking.hall.cover_photo.url }}" alt="Hall Image" class="img-fluid" style="max-width:312px; max-height:216px; width:100%; height:auto; object-fit:cover; border-radius:1.5rem; display:block;">
+                    {% else %}
+                        <div style="width:100%; height:100%; min-height:216px; background:#eee; display:flex; align-items:center; justify-content:center; border-radius:1.5rem; color:#888; font-size:1.2rem;">No Image</div>
+                    {% endif %}
+                </div>
+                <div class="col-8">
+                    <div class="card-body py-4 px-4">
+                        <h5 class="card-title mb-1" style="font-weight:700; color:#c1121f; letter-spacing:0.5px;">{{ booking.hall.name }}</h5>
+                        <div class="mb-1 text-muted" style="font-size:1rem;"><i class="bi bi-geo-alt"></i> {{ booking.hall.location }}</div>
+                        <div class="mb-1 text-muted" style="font-size:1rem;"><i class="bi bi-calendar-event"></i> {{ booking.event_date|date:'F j, Y' }}</div>
+                        <div class="mb-1 text-muted" style="font-size:1rem;"><i class="bi bi-clock"></i> {{ booking.start_time|time:'g:i a' }} - {{ booking.end_time|time:'g:i a' }}</div>
+                        <div class="mb-1 text-muted" style="font-size:1rem;"><i class="bi bi-people"></i> Capacity: {{ booking.hall.capacity }}</div>
+                        <div class="mb-2 text-muted" style="font-size:1rem;"><i class="bi bi-star"></i> Event: {{ booking.hall.get_event_types_display }}</div>
+                        <div class="d-flex align-items-center justify-content-between mt-3">
+                            {% if booking.status == 'Paid' %}
+                                <span class="badge bg-success px-3 py-2" style="font-size:1rem;">Paid</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark px-3 py-2" style="font-size:1rem;">Pending</span>
+                            {% endif %}
+                            {% if booking.status != 'Paid' %}
+                                <a href="{% url 'payment_view' booking.id %}" class="btn btn-danger btn-sm px-4 py-2" style="border-radius:2rem; font-weight:500;">Pay Now</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info text-center">You have no bookings yet.</div>
+{% endif %}
+{% endblock %} 

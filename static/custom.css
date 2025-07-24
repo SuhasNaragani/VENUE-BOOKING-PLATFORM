@@ -1,0 +1,178 @@
+/* 12N HALLS Red Theme & UI Polish */
+
+body {
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    background: #f7f8fa;
+    color: #22223b;
+}
+
+.navbar {
+    transition: box-shadow 0.3s;
+}
+
+.navbar-brand {
+    letter-spacing: 2px;
+    font-size: 1.7rem;
+    color: #fff !important;
+    transition: color 0.2s;
+}
+
+.nav-link {
+    transition: color 0.2s, background 0.2s;
+    border-radius: 4px;
+}
+
+.nav-link.active, .nav-link:focus, .nav-link:hover {
+    background: #b71c1c;
+    color: #fff !important;
+}
+
+.btn-success, .btn-success:focus, .btn-success:active {
+    background: #d32f2f !important;
+    border-color: #d32f2f !important;
+    color: #fff !important;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.btn-success:hover {
+    background: #b71c1c !important;
+    box-shadow: 0 2px 8px rgba(211,47,47,0.15);
+}
+
+.btn-warning, .btn-outline-warning {
+    color: #b71c1c !important;
+    border-color: #b71c1c !important;
+    background: #fff !important;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-warning:hover, .btn-outline-warning:hover {
+    background: #b71c1c !important;
+    color: #fff !important;
+}
+
+.card {
+    border-radius: 1.25rem !important;
+    box-shadow: 0 4px 24px rgba(44, 62, 80, 0.08), 0 1.5px 6px rgba(44, 62, 80, 0.04);
+    transition: box-shadow 0.3s, transform 0.3s;
+    background: #fff;
+}
+
+.card:hover {
+    box-shadow: 0 8px 32px rgba(44, 62, 80, 0.16), 0 3px 12px rgba(44, 62, 80, 0.08);
+    transform: translateY(-6px) scale(1.03);
+}
+
+.card-title {
+    color: #b71c1c;
+    font-weight: 600;
+}
+
+.table thead {
+    background: #d32f2f;
+    color: #fff;
+}
+
+.alert-success {
+    background: #e8f5e9;
+    color: #388e3c;
+    border-color: #c8e6c9;
+}
+
+.alert-info {
+    background: #fff3e0;
+    color: #b71c1c;
+    border-color: #ffe0b2;
+}
+
+.btn-primary {
+    background: #b71c1c !important;
+    border-color: #b71c1c !important;
+}
+
+.btn-primary:hover {
+    background: #d32f2f !important;
+    border-color: #d32f2f !important;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #b71c1c !important;
+    box-shadow: 0 0 0 0.2rem rgba(183,28,28,0.15) !important;
+}
+
+/* Modern, classic UI enhancements */
+
+/* Event type card hover */
+.card.text-center:hover {
+    border-color: #0d6efd !important;
+    box-shadow: 0 6px 24px rgba(13, 110, 253, 0.12);
+    background: #f0f4ff;
+}
+
+/* Button styles */
+.btn {
+    border-radius: 2rem;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.btn-success, .btn-primary, .btn-outline-success, .btn-outline-warning, .btn-warning {
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+}
+.btn:hover, .btn:focus {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 16px rgba(44, 62, 80, 0.16);
+}
+
+/* Search bar focus effect */
+input[type="text"].form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.15);
+    background: #f0f4ff;
+}
+
+/* Section backgrounds */
+.bg-dark-blue {
+    background: linear-gradient(90deg, #232946 60%, #283655 100%);
+}
+
+/* Fade-in animation for cards */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: none; }
+}
+.card, .event-type-card {
+    animation: fadeInUp 0.7s cubic-bezier(.39,.575,.565,1) both;
+}
+
+/* Tab nav modern look */
+.nav-tabs .nav-link.active {
+    background: #0d6efd;
+    color: #fff !important;
+    border-radius: 1.5rem 1.5rem 0 0;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(13,110,253,0.08);
+}
+.nav-tabs .nav-link {
+    color: #232946;
+    font-weight: 500;
+    border-radius: 1.5rem 1.5rem 0 0;
+    transition: background 0.2s, color 0.2s;
+}
+
+/* Divider for sections */
+.section-divider {
+    height: 2px;
+    background: linear-gradient(90deg, #232946 0%, #0d6efd 100%);
+    border: none;
+    margin: 2rem 0;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .card {
+        border-radius: 1rem !important;
+    }
+    .btn-lg.w-50 {
+        width: 100% !important;
+    }
+} 

@@ -1,0 +1,176 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% block title %}Home | Event Halls{% endblock %}
+{% block content %}
+<div class="container my-4">
+  <div id="promotion-carousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      {% for img in promotion_images %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <img src="{% static 'promotion/' %}{{ img }}" class="d-block w-100" alt="Promotion" style="object-fit:cover; max-height:350px; border-radius:1rem;">
+        </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#promotion-carousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#promotion-carousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
+{% if filters.event_type %}
+    <div style="background:#232946; width:100vw; margin-left:calc(-50vw + 50%); margin-right:calc(-50vw + 50%); padding:2rem 0; margin-bottom:2rem;">
+        <div class="container">
+            <div class="row justify-content-center">
+                {% for value, emoji, display in event_types %}
+                <div class="col-6 col-md-3 mb-3">
+                    <a href="?event_type={{ value }}" style="text-decoration:none;">
+                        <div class="card text-center shadow-sm{% if filters.event_type == value %} border-primary{% endif %}" style="border-radius: 1rem; cursor:pointer;{% if filters.event_type == value %} border:2px solid #0d6efd;{% endif %}">
+                            <div class="card-body">
+                                <span style="font-size:2.5rem;">{{ emoji }}</span>
+                                <h5 class="card-title mt-2">{{ display }}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="row mb-4 justify-content-center mt-4">
+        <div class="col-12 d-flex justify-content-center">
+            <a href="?" class="btn btn-outline-secondary btn-lg w-50" style="border-radius: 2rem;">
+                Clear Filter
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        {% for hall in halls %}
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'hall_detail' hall.pk %}" style="text-decoration:none; color:inherit; display:block;">
+            <div class="card h-100 shadow-sm border rounded-4" style="border:1.5px solid #e0e0e0; transition:box-shadow 0.2s, transform 0.2s;">
+                <div class="text-center pt-3" style="background:#fff;">
+                    {% if hall.cover_photo %}
+                        <img src="{{ hall.cover_photo.url }}" alt="Hall Image" style="width:90%; height:120px; object-fit:cover; border-radius:1rem;" loading="lazy">
+                    {% else %}
+                        <div style="width:90%; height:120px; margin:auto; border-radius:1rem; background:#eee; display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:#888;">Image coming soon</div>
+                    {% endif %}
+                </div>
+                <div class="card-body pb-2">
+                    <h5 class="card-title mb-2" style="font-weight:600;">{{ hall.name }}</h5>
+                    <div class="mb-1" style="font-size:1.15rem; font-weight:500; color:#222;">
+                        ₹ {{ hall.price_per_hour }} <span class="text-muted" style="font-size:1rem; font-weight:400;">per hour</span>
+                    </div>
+                    <div class="mb-1 text-muted" style="font-size:1rem;">Capacity: {{ hall.capacity }}</div>
+                    <div class="mb-1 text-muted" style="font-size:1rem;">Location: {{ hall.location }}</div>
+                    <div class="mb-2 text-muted" style="font-size:1rem;">Event: {{ hall.get_event_types_display }}</div>
+                    {% if user.is_authenticated %}
+                        <form action="{% url 'favorite_hall' hall.pk %}" method="post" class="favorite-form" data-hall-id="{{ hall.pk }}" data-favorited="{% if hall.id in favorite_hall_ids %}true{% else %}false{% endif %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm mt-2 favorite-btn {% if hall.id in favorite_hall_ids %}btn-warning{% else %}btn-outline-warning{% endif %}" title="Favorite" style="color:#ffc107; border-color:#ffc107;">
+                                <i class="bi {% if hall.id in favorite_hall_ids %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+                            </button>
+                        </form>
+                    {% endif %}
+                    <a href="{% url 'book_now' hall.pk %}" class="btn btn-success btn-sm mt-2">Book Now</a>
+                </div>
+            </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="row">
+        {% for hall in halls|slice:":3" %}
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'hall_detail' hall.pk %}" style="text-decoration:none; color:inherit; display:block;">
+            <div class="card h-100 shadow-sm border rounded-4" style="border:1.5px solid #e0e0e0; transition:box-shadow 0.2s, transform 0.2s;">
+                <div class="text-center pt-3" style="background:#fff;">
+                    {% if hall.cover_photo %}
+                        <img src="{{ hall.cover_photo.url }}" alt="Hall Image" style="width:90%; height:120px; object-fit:cover; border-radius:1rem;" loading="lazy">
+                    {% else %}
+                        <div style="width:90%; height:120px; margin:auto; border-radius:1rem; background:#eee; display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:#888;">Image coming soon</div>
+                    {% endif %}
+                </div>
+                <div class="card-body pb-2">
+                    <h5 class="card-title mb-2" style="font-weight:600;">{{ hall.name }}</h5>
+                    <div class="mb-1" style="font-size:1.15rem; font-weight:500; color:#222;">
+                        ₹ {{ hall.price_per_hour }} <span class="text-muted" style="font-size:1rem; font-weight:400;">per hour</span>
+                    </div>
+                    <div class="mb-1 text-muted" style="font-size:1rem;">Capacity: {{ hall.capacity }}</div>
+                    <div class="mb-1 text-muted" style="font-size:1rem;">Location: {{ hall.location }}</div>
+                    <div class="mb-2 text-muted" style="font-size:1rem;">Event: {{ hall.get_event_types_display }}</div>
+                    {% if user.is_authenticated %}
+                        <form action="{% url 'favorite_hall' hall.pk %}" method="post" class="favorite-form" data-hall-id="{{ hall.pk }}" data-favorited="{% if hall.id in favorite_hall_ids %}true{% else %}false{% endif %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm mt-2 favorite-btn {% if hall.id in favorite_hall_ids %}btn-warning{% else %}btn-outline-warning{% endif %}" title="Favorite" style="color:#ffc107; border-color:#ffc107;">
+                                <i class="bi {% if hall.id in favorite_hall_ids %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+                            </button>
+                        </form>
+                    {% endif %}
+                    <a href="{% url 'book_now' hall.pk %}" class="btn btn-success btn-sm mt-2">Book Now</a>
+                </div>
+            </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    <div style="background:#232946; width:100vw; margin-left:calc(-50vw + 50%); margin-right:calc(-50vw + 50%); padding:2rem 0; margin-bottom:2rem;">
+        <div class="container">
+            <div class="row justify-content-center">
+                {% for value, emoji, display in event_types %}
+                <div class="col-6 col-md-3 mb-3">
+                    <a href="?event_type={{ value }}" style="text-decoration:none;">
+                        <div class="card text-center shadow-sm{% if filters.event_type == value %} border-primary{% endif %}" style="border-radius: 1rem; cursor:pointer;{% if filters.event_type == value %} border:2px solid #0d6efd;{% endif %}">
+                            <div class="card-body">
+                                <span style="font-size:2.5rem;">{{ emoji }}</span>
+                                <h5 class="card-title mt-2">{{ display }}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {% for hall in halls|slice:"3:" %}
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'hall_detail' hall.pk %}" style="text-decoration:none; color:inherit; display:block;">
+            <div class="card h-100 shadow-sm border rounded-4" style="border:1.5px solid #e0e0e0; transition:box-shadow 0.2s, transform 0.2s;">
+                <div class="text-center pt-3" style="background:#fff;">
+                    {% if hall.cover_photo %}
+                        <img src="{{ hall.cover_photo.url }}" alt="Hall Image" style="width:90%; height:120px; object-fit:cover; border-radius:1rem;" loading="lazy">
+                    {% else %}
+                        <div style="width:90%; height:120px; margin:auto; border-radius:1rem; background:#eee; display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:#888;">Image coming soon</div>
+                    {% endif %}
+                </div>
+                <div class="card-body pb-2">
+                    <h5 class="card-title mb-2" style="font-weight:600;">{{ hall.name }}</h5>
+                    <div class="mb-1" style="font-size:1.15rem; font-weight:500; color:#222;">
+                        ₹ {{ hall.price_per_hour }} <span class="text-muted" style="font-size:1rem; font-weight:400;">per hour</span>
+                    </div>
+                    <div class="mb-1 text-muted" style="font-size:1rem;">Capacity: {{ hall.capacity }}</div>
+                    <div class="mb-1 text-muted" style="font-size:1rem;">Location: {{ hall.location }}</div>
+                    <div class="mb-2 text-muted" style="font-size:1rem;">Event: {{ hall.get_event_types_display }}</div>
+                    {% if user.is_authenticated %}
+                        <form action="{% url 'favorite_hall' hall.pk %}" method="post" class="favorite-form" data-hall-id="{{ hall.pk }}" data-favorited="{% if hall.id in favorite_hall_ids %}true{% else %}false{% endif %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm mt-2 favorite-btn {% if hall.id in favorite_hall_ids %}btn-warning{% else %}btn-outline-warning{% endif %}" title="Favorite" style="color:#ffc107; border-color:#ffc107;">
+                                <i class="bi {% if hall.id in favorite_hall_ids %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+                            </button>
+                        </form>
+                    {% endif %}
+                    <a href="{% url 'book_now' hall.pk %}" class="btn btn-success btn-sm mt-2">Book Now</a>
+                </div>
+            </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
+<script src="{% static 'custom.js' %}"></script>
+{% endblock %} 

@@ -1,0 +1,41 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% block title %}My Favorites | Event Website{% endblock %}
+{% block content %}
+<h2 class="mb-4 text-center">My Favorite Halls</h2>
+<div class="row">
+    {% for hall in favorite_halls %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm border rounded-4" style="border:1.5px solid #e0e0e0; transition:box-shadow 0.2s, transform 0.2s;">
+            <div class="text-center pt-3" style="background:#fff;">
+                {% if hall.cover_photo %}
+                    <img src="{{ hall.cover_photo.url }}" alt="Hall Image" style="width:90%; height:120px; object-fit:cover; border-radius:1rem;" loading="lazy">
+                {% else %}
+                    <div style="width:90%; height:120px; margin:auto; border-radius:1rem; background:#eee; display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:#888;">Image coming soon</div>
+                {% endif %}
+            </div>
+            <div class="card-body pb-2">
+                <h5 class="card-title mb-2" style="font-weight:600;">{{ hall.name }}</h5>
+                <div class="mb-1" style="font-size:1.15rem; font-weight:500; color:#222;">
+                    ₹ {{ hall.price_per_hour }} <span class="text-muted" style="font-size:1rem; font-weight:400;">per hour</span>
+                </div>
+                <div class="mb-1 text-muted" style="font-size:1rem;">Capacity: {{ hall.capacity }}</div>
+                <div class="mb-1 text-muted" style="font-size:1rem;">Location: {{ hall.location }}</div>
+                <div class="mb-2 text-muted" style="font-size:1rem;">Event: {{ hall.get_event_types_display }}</div>
+                {% if user.is_authenticated %}
+                    <form action="{% url 'favorite_hall' hall.pk %}" method="post" class="favorite-form" data-hall-id="{{ hall.pk }}" data-favorited="true">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm mt-2 favorite-btn btn-warning" title="Unfavorite" style="color:#ffc107; border-color:#ffc107;">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
+                    </form>
+                {% endif %}
+                <a href="{% url 'hall_detail' hall.pk %}" class="btn btn-success btn-sm mt-2">View & Book</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-info text-center">You have no favorite halls yet.</div>
+    {% endfor %}
+</div>
+{% endblock %} 
